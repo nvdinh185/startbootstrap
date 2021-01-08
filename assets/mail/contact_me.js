@@ -21,7 +21,7 @@ $(function () {
             $this = $("#sendMessageButton");
             $this.prop("disabled", true); // Disable submit button until AJAX call is complete to prevent duplicate messages
             $.ajax({
-                url: "/assets/mail/contact_me.php",
+                url: "http://localhost:8080/test-post",
                 type: "POST",
                 data: {
                     name: name,
@@ -29,6 +29,7 @@ $(function () {
                     email: email,
                     message: message,
                 },
+                datatype: "json",
                 cache: false,
                 success: function () {
                     // Success message
@@ -56,13 +57,34 @@ $(function () {
                     $("#success > .alert-danger").append(
                         $("<strong>").text(
                             "Sorry " +
-                                firstName +
-                                ", it seems that my mail server is not responding. Please try again later!"
+                            firstName +
+                            ", it seems that my mail server is not responding. Please try again later!"
                         )
                     );
                     $("#success > .alert-danger").append("</div>");
                     //clear all fields
                     $("#contactForm").trigger("reset");
+                },
+                complete: function () {
+                    setTimeout(function () {
+                        $this.prop("disabled", false); // Re-enable submit button when AJAX call is complete
+                    }, 1000);
+                },
+            });
+
+            $this = $("#getData");
+            $this.prop("disabled", true); // Disable submit button until AJAX call is complete to prevent duplicate messages
+            $.ajax({
+                url: "http://localhost:8080/test-get",
+                type: "GET",
+                cache: false,
+                success: function (data) {
+                    // Success message
+                    console.log(data);
+                },
+                error: function (err) {
+                    // Fail message
+                    console.log(err);
                 },
                 complete: function () {
                     setTimeout(function () {
