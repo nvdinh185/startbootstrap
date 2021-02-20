@@ -1,5 +1,6 @@
 const express = require('express');
 const app = express();
+fs = require('fs');
 
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
@@ -17,6 +18,16 @@ app.get('/test-get', function (req, res) {
 app.post('/test-post', function (req, res) {
   console.log(req.body);
   res.end(JSON.stringify({ message: 'OK!' }));
+});
+
+app.get('/get-info', function (req, res) {
+  let myData = [];
+  try {
+    myData = fs.readFileSync(__dirname + '/data.txt', 'utf8');
+  } catch (err) {
+    console.error(err)
+  }
+  res.end(JSON.stringify(myData));
 });
 
 const server = require('http').Server(app);

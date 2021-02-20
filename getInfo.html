@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+	<title>Thông tin nhân viên công ty</title>
+	<link rel="stylesheet"
+		href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/themes/redmond/jquery-ui.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/free-jqgrid/4.15.5/css/ui.jqgrid.min.css">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/free-jqgrid/4.15.5/jquery.jqgrid.min.js"></script>
+</head>
+
+<body>
+	<table id="grid1"></table>
+</body>
+<script>
+	$(function () {
+		"use strict";
+		$.ajax({
+			url: "http://localhost:8080/get-info",
+			type: "GET",
+			cache: false,
+			success: function (data) {
+				// Success
+				let myData = JSON.parse(JSON.parse(data));
+				executeJqGrid(myData);
+			},
+			error: function (err) {
+				// Fail
+				console.log(err);
+			},
+			complete: function () {
+				console.log("Complete!");
+			},
+		});
+		let executeJqGrid = (data) => {
+			$("#grid1").jqGrid({
+				colModel: [
+					{ name: "name", label: "Họ tên", width: 153 },
+					{ name: "birthday", label: "Ngày sinh", width: 90, align: "center", formatter: "date", formatoptions: { newformat: "d-M-Y" } },
+					{ name: "gender", label: "Giới tính", width: 59, template: "booleanCheckbox" },
+					{
+						name: "address", label: "Địa chỉ", width: 87, align: "center",
+						formatter: "select", formatoptions: { value: "HN:Hà Nội;DN:Đà Nẵng;HCM:TP Hồ Chí Minh", defaultValue: "DN" },
+						stype: "select", searchoptions: { value: ":All;HN:Hà Nội;DN:Đà Nẵng;HCM:TP Hồ Chí Minh" }
+					},
+					{ name: "salary", label: "Lương", width: 65, template: "number" },
+				],
+				data: data,
+				iconSet: "fontAwesome",
+				rownumbers: true,
+				sortname: "birthday",
+				sortorder: "desc",
+				toppager: true,
+				pager: true,
+				rowNum: 5,
+				viewrecords: true,
+				caption: "Thông tin nhân viên công ty"
+			}).jqGrid("filterToolbar");
+		}
+
+	});
+</script>
+
+</html>
