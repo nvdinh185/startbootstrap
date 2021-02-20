@@ -26,8 +26,7 @@
 			cache: false,
 			success: function (data) {
 				// Success
-				let myData = JSON.parse(JSON.parse(data));
-				executeJqGrid(myData);
+				executeJqGrid(JSON.parse(data));
 			},
 			error: function (err) {
 				// Fail

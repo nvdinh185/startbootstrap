@@ -25,9 +25,9 @@ app.get('/get-info', function (req, res) {
   try {
     myData = fs.readFileSync(__dirname + '/data.txt', 'utf8');
   } catch (err) {
-    console.error(err)
+    console.error(err);
   }
-  res.end(JSON.stringify(myData));
+  res.end(JSON.parse(JSON.stringify(myData)));
 });
 
 const server = require('http').Server(app);
